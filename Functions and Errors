@@ -1,0 +1,38 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract ExampleContract {
+    address public owner;
+    uint256 public value;
+    
+    constructor() {
+        owner = msg.sender; // Set the contract deployer as the owner
+    }
+
+    // Modifier to check if the caller is the owner
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Caller is not the owner");
+        _;
+    }
+
+    // Function to set a value with require() to check conditions
+    function setValue(uint256 newValue) public onlyOwner {
+        require(newValue > 0, "Value must be greater than zero");
+        value = newValue;
+    }
+
+    // Function to demonstrate assert()
+    function checkValue() public view returns (string memory) {
+        // This assert will always be true since value cannot be negative
+        assert(value >= 0);
+        return "Value is non-negative";
+    }
+
+    // Function to demonstrate revert()
+    function resetValue() public onlyOwner {
+        if (value == 0) {
+            revert("Value is already zero");
+        }
+        value = 0;
+    }
+}
